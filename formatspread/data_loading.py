@@ -87,6 +87,9 @@ def set_up_prompt_variation_exploration_without_extra_files(
 
     raw_dataset = _load_raw_dataset_supernatural_instructions(args.task_filename)
     demonstration_definition = raw_dataset['Definition'][0] if instruction is None else instruction
+    print('Inside set_up_prompt_variation_exploration_without_extra_files, printing demonstration_definition Example: ',
+          demonstration_definition)
+    print()
 
     raw_dataset = raw_dataset['Instances']
     if hasattr(args, 'dataset_ordered_ids') and args.dataset_ordered_ids:

@@ -178,6 +178,7 @@ def evaluate_prompt_format(
             dataset_updated, selected_dataset_ids, model, tokenizer, input_prompt_string_list, args.batch_size_llm)
 
     elif args.evaluation_metric == 'exact_prefix_matching':
+
         logs = generate_text_with_metadata(
             args, input_prompt_string_list, model, tokenizer, model_will_repeat_input,
             dataset_updated, selected_dataset_ids, output_classes)
@@ -257,6 +258,7 @@ def match_robust_to_multiple_choice(generation, answer_to_compare):
 
 
 def exact_prefix_matching_scoring(logs):
+
     accuracy = {
         'right': [],
         'wrong': [],

@@ -429,7 +429,6 @@ if __name__ == "__main__":
     # 1. load task
     structured_prompt_format, global_constraints, extra_params_structured_prompt_format, \
     original_multiple_choice_output_format, args_compute_node_score, _ = _load_task(args)
-    print('Task loaded.')
 
     # 1.b. check that the evaluation metric is reasonable
     # Specifically, we can compute probability ranking metric only if the task is a classification task

@@ -33,6 +33,13 @@ class GeneticAlgorithmAmongPrompts:
                  objective,
                  allow_text_action_type=True,
                  original_multiple_choice_output_format=None):
+        """
+        Initializes the Genetic Algorithm for prompt optimization.
+
+        This method sets up the initial state, including the original prompt format,
+        constraints, and parameters for evaluation. It also initializes data structures
+        to track different prompt variations and their performances.
+        """
         self.args_compute_node_score = args_compute_node_score
         self.metadata = {}
         self.all_structured_prompt_formats_last_id_evaluated = {}
@@ -87,13 +94,17 @@ class GeneticAlgorithmAmongPrompts:
         # output_format = "Option {enum1}", where "enum1" is the object name
         object_name = output_format.split('{')[1].split('}')[0]
 
+        # Retrieve the structured prompt format and global constraints for the given node
         structured_prompt_format, global_constraints = self.all_structured_prompt_formats[resolved_node_format]
+        # Combine all pointers from the structured prompt format and global constraints
         all_pointers = pointers_to_all_objects(structured_prompt_format) + global_constraints
         pointer_to_object_list = [pointer
                                   for pointer in all_pointers
                                   if 'object_name' in pointer.__dict__ and pointer.object_name == object_name]
         assert len(pointer_to_object_list) == 1
         pointer_to_object = pointer_to_object_list[0]
+        # Generate all possible output classes by formatting the output_format string
+        # with each enumeration item from the pointer object
         return [output_format.format(**{object_name: pointer_to_object.chosen_number_format(idx)})
                 for idx in pointer_to_object.enumeration_item_id_list]
 
@@ -139,6 +150,9 @@ class GeneticAlgorithmAmongPrompts:
 
     def _compute_node_score_from_resolved_prompt(self, resolved_prompt, num_samples_to_test=-1):
         last_id_analyzed = self.all_structured_prompt_formats_last_id_evaluated.get(resolved_prompt, 0)
+        # Determine the range of sample IDs to test
+        # If num_samples_to_test is specified, test that many samples starting from the last analyzed
+        # Otherwise, test all remaining samples (indicated by (None, None))
         interval_ids_to_test = (last_id_analyzed, last_id_analyzed + num_samples_to_test) \
             if num_samples_to_test != -1 and last_id_analyzed is not None \
             else (None, None)
